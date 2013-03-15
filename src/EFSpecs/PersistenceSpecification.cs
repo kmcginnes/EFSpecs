@@ -6,6 +6,7 @@ using System.Data.Entity.Validation;
 using System.Data.Metadata.Edm;
 using System.Data.SqlClient;
 using System.Linq.Expressions;
+using System.Text;
 using System.Transactions;
 using EFSpecs.Mapping;
 using EFSpecs.Reflection;
@@ -79,58 +80,39 @@ namespace EFSpecs
             }
             catch (CoastIsClearException)
             {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("Rolling back all transactions");
-                Console.ResetColor();
+                // Do nothing because all assertions passed
             }
             catch (DbEntityValidationException e)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
+                var messageBuilder = new StringBuilder();
                 foreach (var eve in e.EntityValidationErrors)
                 {
-                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                    messageBuilder.AppendFormat(
+                        "Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
                         eve.Entry.Entity.GetType().Name, eve.Entry.State);
                     foreach (var ve in eve.ValidationErrors)
                     {
-                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                        messageBuilder.AppendFormat(
+                            "- Property: \"{0}\", Error: \"{1}\"",
                             ve.PropertyName, ve.ErrorMessage);
                     }
                 }
-                Console.WriteLine("Rolling back all transactions");
-                Console.ResetColor();
+
+                throw new AssertionException(messageBuilder.ToString());
             }
             catch (Exception exception)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Error: {0}", exception.GetBaseException().Message);
-                Console.WriteLine("Rolling back all transactions");
-                Console.ResetColor();
+                var message = string.Format("Error: {0}", exception.GetBaseException().Message);
+
+                throw new AssertionException(message);
             }
         }
 
         private void SaveEntityToDb(DbContext ctx, TEntity expected)
         {
             var dbSet = GetDbSet(ctx);
-
-            try
-            {
-                Console.WriteLine("Adding instance to db set");
-                dbSet.Add(expected);
-                Console.WriteLine("Saving changes to database");
-                ctx.SaveChanges();
-                Console.WriteLine("Entity saved with id {0}", GetKeyValue(expected));
-            }
-            catch (Exception exception)
-            {
-                var baseException = exception.GetBaseException();
-                if (baseException is SqlException)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine(baseException.Message);
-                    Console.ResetColor();
-                }
-                throw;
-            }
+            dbSet.Add(expected);
+            ctx.SaveChanges();
         }
 
         private void SetPropertiesOnEntity(TEntity expected)
@@ -174,9 +156,5 @@ namespace EFSpecs
         {
             return ctx.Set<TEntity>();
         }
-    }
-
-    public class CoastIsClearException : Exception
-    {
     }
 }
