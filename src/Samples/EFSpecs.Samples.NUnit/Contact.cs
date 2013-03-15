@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EFSpecs.Samples.EF5ConsoleSample
+namespace EFSpecs.Samples.EF5ConsoleSample.Tests
 {
     public class Contact
     {

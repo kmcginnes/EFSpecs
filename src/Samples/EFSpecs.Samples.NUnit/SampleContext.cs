@@ -1,6 +1,6 @@
 ﻿using System.Data.Entity;
 
-namespace EFSpecs.Samples.EF5ConsoleSample
+namespace EFSpecs.Samples.EF5ConsoleSample.Tests
 {
     public class SampleContext : DbContext
     {

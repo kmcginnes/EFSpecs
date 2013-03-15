@@ -4,7 +4,6 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 using System.Data.Metadata.Edm;
-using System.Data.SqlClient;
 using System.Linq.Expressions;
 using System.Text;
 using System.Transactions;

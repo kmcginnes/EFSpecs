@@ -10,11 +10,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{2C9563
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFSpecs.Samples.EF5ConsoleSample", "Samples\EFSpecs.Samples.EF5ConsoleSample\EFSpecs.Samples.EF5ConsoleSample.csproj", "{E7C7E1EB-CF19-499C-A5B1-E9FB22344206}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{05794F41-485F-400B-AB5E-8F4161015FD9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFSpecs.Samples.EF5ConsoleSample.Tests", "Samples\EFSpecs.Samples.EF5ConsoleSample.Tests\EFSpecs.Samples.EF5ConsoleSample.Tests.csproj", "{39B2D6C5-D2E5-432F-8ADE-2F838D21AC28}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFSpecs.Samples.NUnit", "Samples\EFSpecs.Samples.NUnit\EFSpecs.Samples.NUnit.csproj", "{39B2D6C5-D2E5-432F-8ADE-2F838D21AC28}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,10 +24,6 @@ Global
 		{B961DD13-1971-41FB-A429-B61637A6D747}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B961DD13-1971-41FB-A429-B61637A6D747}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B961DD13-1971-41FB-A429-B61637A6D747}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E7C7E1EB-CF19-499C-A5B1-E9FB22344206}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E7C7E1EB-CF19-499C-A5B1-E9FB22344206}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E7C7E1EB-CF19-499C-A5B1-E9FB22344206}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E7C7E1EB-CF19-499C-A5B1-E9FB22344206}.Release|Any CPU.Build.0 = Release|Any CPU
 		{39B2D6C5-D2E5-432F-8ADE-2F838D21AC28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{39B2D6C5-D2E5-432F-8ADE-2F838D21AC28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39B2D6C5-D2E5-432F-8ADE-2F838D21AC28}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,7 +33,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{E7C7E1EB-CF19-499C-A5B1-E9FB22344206} = {05794F41-485F-400B-AB5E-8F4161015FD9}
 		{39B2D6C5-D2E5-432F-8ADE-2F838D21AC28} = {05794F41-485F-400B-AB5E-8F4161015FD9}
 	EndGlobalSection
 EndGlobal
