@@ -1,9 +1,38 @@
-﻿using System.Data.Entity;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration;
 
 namespace EFSpecs.Samples.EF5ConsoleSample.Tests
 {
-    public class SampleContext : DbContext
+    public class User
     {
-        public DbSet<Contact> Contacts { get; set; }
+        public int UserId { get; set; }
+        public string Name { get; set; }
+        public int Age { get; set; }
+        public int BillingAddressId { get; set; }
+        
+        public virtual Address BillingAddress { get; set; }
+    }
+
+    public class Address
+    {
+        public int AddressId { get; set; }
+        public string Street { get; set; }
+        public string City { get; set; }
+        public string ZipCode { get; set; }
+    }
+
+    public class Context : DbContext
+    {
+        public DbSet<User> Users { get; set; }
+        public DbSet<Address> Addresses { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                        .HasRequired(a => a.BillingAddress)
+                        .WithMany()
+                        .HasForeignKey(u => u.BillingAddressId);
+        }
     }
 }

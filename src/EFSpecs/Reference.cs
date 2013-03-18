@@ -1,36 +1,42 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
-using System.Diagnostics;
 using EFSpecs.Mapping;
 using EFSpecs.Reflection;
+using ServiceStack.Text;
 
 namespace EFSpecs
 {
-    public class Reference
+    public class Reference : IEntityValueAsserter
     {
-        public PropertyAccessor PropertyInfo { get; private set; }
+        public PropertyAccessor Accessor { get; private set; }
         public object ExpectedEntity { get; private set; }
 
         public Reference(PropertyAccessor propertyInfo, object value)
         {
-            PropertyInfo = propertyInfo;
+            Accessor = propertyInfo;
             ExpectedEntity = value;
         }
 
         public void SetValue(object instance)
         {
-            PropertyInfo.SetValue(instance, ExpectedEntity);
+            Accessor.SetValue(instance, ExpectedEntity);
         }
 
         public void AssertValue(DbContext ctx, object actual)
         {
-            var propertyType = PropertyInfo.MemberType;
+            var propertyType = Accessor.MemberType;
 
             var objectContext = ((IObjectContextAdapter)ctx).ObjectContext;
             var entitySet = objectContext.GetEntitySet(propertyType);
             var keyMembers = entitySet.ElementType.KeyMembers;
 
-            var actualEntity = PropertyInfo.GetValue(actual);
+            ctx.Entry(actual).Reference(Accessor.Name).Load();
+
+            var actualEntity = Accessor.GetValue(actual);
+            if (actualEntity == null)
+            {
+                throw new AssertionException(ExpectedEntity.Dump(), "NULL");
+            }
             foreach (var keyMember in keyMembers)
             {
                 var accessor = new PropertyAccessor(propertyType.GetProperty(keyMember.Name));
@@ -38,8 +44,10 @@ namespace EFSpecs
                 var actualKeyValue = accessor.GetValue(actualEntity);
                 var expectedKeyValue = accessor.GetValue(ExpectedEntity);
 
-                Debug.Assert(actualKeyValue.Equals(expectedKeyValue),
-                             string.Format("Assertion failed! Expected: {0} Actual: {1}", ExpectedEntity, actualEntity));
+                if (!expectedKeyValue.Equals(actualKeyValue))
+                {
+                    throw new AssertionException(ExpectedEntity.Dump(), actualEntity.Dump());
+                }
             }
         }
     }

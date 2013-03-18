@@ -38,6 +38,9 @@
     <Reference Include="FluentAssertions">
       <HintPath>..\packages\FluentAssertions.2.0.1\lib\net40\FluentAssertions.dll</HintPath>
     </Reference>
+    <Reference Include="ServiceStack.Text">
+      <HintPath>..\packages\ServiceStack.Text.3.9.40\lib\net35\ServiceStack.Text.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -52,6 +55,8 @@
   <ItemGroup>
     <Compile Include="AssertionException.cs" />
     <Compile Include="CoastIsClearException.cs" />
+    <Compile Include="IEntityValueAsserter.cs" />
+    <Compile Include="MappingsValidator.cs" />
     <Compile Include="Mapping\EntityMap.cs" />
     <Compile Include="Mapping\IMappingProvider.cs" />
     <Compile Include="Mapping\MappingResolver.cs" />
