@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
-using System.Data.Metadata.Edm;
 using System.Linq.Expressions;
 using System.Text;
 using System.Transactions;
-using EFSpecs.Mapping;
 using EFSpecs.Reflection;
 
 namespace EFSpecs
@@ -16,15 +13,12 @@ namespace EFSpecs
         where TEntity : class
     {
         private readonly Func<DbContext> _createContext;
-        private readonly List<Property> _properties;
-        private readonly List<Reference> _references;
-	    private ReadOnlyMetadataCollection<EdmMember> _keyMembers;
+        private readonly List<IEntityValueAsserter> _properties;
 
         public PersistenceSpecification(Func<DbContext> createContext)
         {
             _createContext = createContext;
-            _properties = new List<Property>();
-            _references = new List<Reference>();
+            _properties = new List<IEntityValueAsserter>();
         }
 
         public PersistenceSpecification<TEntity> CheckProperty<TProperty>(Expression<Func<TEntity, TProperty>> property, object value)
@@ -37,7 +31,7 @@ namespace EFSpecs
         public PersistenceSpecification<TEntity> CheckReference<TProperty>(Expression<Func<TEntity, TProperty>> property, object value)
         {
             var accessor = ReflectionHelper.ExtractPropertyInfo(property).ToAccessor();
-            _references.Add(new Reference(accessor, value));
+            _properties.Add(new Reference(accessor, value));
             return this;
         }
 
@@ -47,42 +41,34 @@ namespace EFSpecs
             {
                 using (new TransactionScope())
                 {
-                    object[] id;
-                    using (var ctx = _createContext())
-                    {
-                        var objectContext = ((IObjectContextAdapter) ctx).ObjectContext;
-                        var entitySet = objectContext.GetEntitySet<TEntity>();
-                        _keyMembers = entitySet.ElementType.KeyMembers;
-
-                        var expected = CreateEntity(ctx);
-                        SetPropertiesOnEntity(expected);
-
-                        SaveEntityToDb(ctx, expected);
-                        id = GetKeyValue(expected);
-                    }
-
-                    using (var ctx = _createContext())
-                    {
-                        var actual = GetActualEntity(ctx, id);
-                        foreach (var property in _properties)
-                        {
-                            property.AssertValue(actual);
-                        }
-                        foreach (var reference in _references)
-                        {
-                            reference.AssertValue(ctx, actual);
-                        }
-                    }
+                    new MappingsValidator<TEntity>(_createContext, _properties).Verify();
 
                     throw new CoastIsClearException();
                 }
             }
-            catch (CoastIsClearException)
+            catch (Exception exception)
+            {
+                if (!HandleException(exception))
+                {
+                    throw exception;
+                }
+            }
+        }
+
+        private bool HandleException(Exception exception)
+        {
+            if (exception is CoastIsClearException)
             {
                 // Do nothing because all assertions passed
+                return true;
             }
-            catch (DbEntityValidationException e)
+            else if (exception is AssertionException)
             {
+                return false;
+            }
+            else if (exception is DbEntityValidationException)
+            {
+                var e = (DbEntityValidationException) exception;
                 var messageBuilder = new StringBuilder();
                 foreach (var eve in e.EntityValidationErrors)
                 {
@@ -99,61 +85,12 @@ namespace EFSpecs
 
                 throw new AssertionException(messageBuilder.ToString());
             }
-            catch (Exception exception)
+            else
             {
                 var message = string.Format("Error: {0}", exception.GetBaseException().Message);
 
                 throw new AssertionException(message);
             }
-        }
-
-        private void SaveEntityToDb(DbContext ctx, TEntity expected)
-        {
-            var dbSet = GetDbSet(ctx);
-            dbSet.Add(expected);
-            ctx.SaveChanges();
-        }
-
-        private void SetPropertiesOnEntity(TEntity expected)
-        {
-            foreach (var property in _properties)
-            {
-                property.SetValue(expected);
-            }
-            foreach (var reference in _references)
-            {
-                reference.SetValue(expected);
-            }
-        }
-
-        private TEntity CreateEntity(DbContext ctx)
-        {
-            var entity = GetDbSet(ctx).Create<TEntity>();
-            return entity;
-        }
-
-        private object[] GetKeyValue(TEntity expected)
-        {
-            var keyValues = new List<object>();
-            foreach (var keyMember in _keyMembers)
-            {
-                var propertyInfo = typeof (TEntity).GetProperty(keyMember.Name);
-                var accessor = new PropertyAccessor(propertyInfo);
-                var value = accessor.GetValue(expected);
-                keyValues.Add(value);
-            }
-            return keyValues.ToArray();
-        }
-
-        private TEntity GetActualEntity(DbContext ctx, object[] id)
-        {
-            var dbSet = GetDbSet(ctx);
-            return dbSet.Find(id);
-        }
-
-        private DbSet<TEntity> GetDbSet(DbContext ctx)
-        {
-            return ctx.Set<TEntity>();
         }
     }
 }

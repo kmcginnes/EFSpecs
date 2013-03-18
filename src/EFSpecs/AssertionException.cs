@@ -5,6 +5,9 @@ namespace EFSpecs
 {
     public class AssertionException : Exception
     {
+        public AssertionException(string expected, string actual)
+            : base(string.Format("Assertion failed! Expected: {0} Actual: {1}", expected, actual)) {}
+
         public AssertionException(string message) : base(message) { }
 
         public override string StackTrace
