@@ -44,7 +44,7 @@ namespace EFSpecs
                 var actualKeyValue = accessor.GetValue(actualEntity);
                 var expectedKeyValue = accessor.GetValue(ExpectedEntity);
 
-                if (expectedKeyValue.Equals(actualKeyValue))
+                if (!expectedKeyValue.Equals(actualKeyValue))
                 {
                     throw new AssertionException(ExpectedEntity.Dump(), actualEntity.Dump());
                 }

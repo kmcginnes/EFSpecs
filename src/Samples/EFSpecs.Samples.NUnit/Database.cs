@@ -15,6 +15,7 @@ namespace EFSpecs.Samples.EF5ConsoleSample.Tests
             using (var conn = new SqlConnection(ConnectionString))
             {
                 conn.Open();
+                // TODO: Change search for "GO" to regex for safety
                 foreach (var queryCommand in scriptFile.Split(
                     new[] {"GO"}, StringSplitOptions.RemoveEmptyEntries))
                 {
@@ -30,8 +31,6 @@ namespace EFSpecs.Samples.EF5ConsoleSample.Tests
         {
             var result = string.Empty;
 
-            //using (var stream = this.GetType().Assembly.
-            //           GetManifestResourceStream("assembly.folder." + filename))
             using (var stream = Assembly.GetExecutingAssembly()
                        .GetManifestResourceStream(this.GetType().Namespace + "." + filename))
             {

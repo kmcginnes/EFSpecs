@@ -9,7 +9,7 @@ USE [Test]
 
 CREATE TABLE Addresses
 (
-	AddressId INT PRIMARY KEY,
+	AddressId INT IDENTITY(1,1) PRIMARY KEY,
 	Street NVARCHAR(MAX) NULL,
 	City NVARCHAR(MAX) NULL,
 	ZipCode NVARCHAR(MAX) NULL,
@@ -18,7 +18,7 @@ GO
 
 CREATE TABLE Users
 (
-	UserId INT PRIMARY KEY,
+	UserId INT IDENTITY(1,1) PRIMARY KEY,
 	Name NVARCHAR(MAX) NULL,
 	-- Simulate a column missing in the schema
 	-- This should get caught by VerifyMappings

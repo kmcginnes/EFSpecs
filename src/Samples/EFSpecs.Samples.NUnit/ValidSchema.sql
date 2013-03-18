@@ -9,7 +9,7 @@ USE [Test]
 
 CREATE TABLE Addresses
 (
-	AddressId INT PRIMARY KEY,
+	AddressId INT IDENTITY(1,1) PRIMARY KEY,
 	Street NVARCHAR(MAX) NULL,
 	City NVARCHAR(MAX) NULL,
 	ZipCode NVARCHAR(MAX) NULL,
@@ -18,10 +18,10 @@ GO
 
 CREATE TABLE Users
 (
-	UserId INT PRIMARY KEY,
+	UserId INT IDENTITY(1,1) PRIMARY KEY,
 	Name NVARCHAR(MAX) NULL,
 	Age INT NOT NULL,
-	BillingAddressId INT NOT NULL,
+	BillingAddressId INT NULL,
     CONSTRAINT [Addresses_BillingAddressId] FOREIGN KEY ([BillingAddressId]) REFERENCES [dbo].[Addresses] ([AddressId])
 )
 GO

@@ -1,4 +1,6 @@
-﻿using System.Data.Entity;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration;
 
 namespace EFSpecs.Samples.EF5ConsoleSample.Tests
 {
@@ -9,7 +11,7 @@ namespace EFSpecs.Samples.EF5ConsoleSample.Tests
         public int Age { get; set; }
         public int BillingAddressId { get; set; }
         
-        public Address BillingAddress { get; set; }
+        public virtual Address BillingAddress { get; set; }
     }
 
     public class Address
