@@ -29,42 +29,20 @@ namespace EFSpecs
                 var entitySet = objectContext.GetEntitySet<TEntity>();
                 _keyMembers = entitySet.ElementType.KeyMembers;
 
-                var expected = CreateEntity(ctx);
-                SetPropertiesOnEntity(expected);
+                var expected = objectContext.CreateObject<TEntity>();
+                _mappings.ForEach(x => x.SetValue(expected));
 
-                SaveEntityToDb(ctx, expected);
+                objectContext.AddObject(entitySet.Name, expected);
+                objectContext.SaveChanges();
+
                 id = GetKeyValue(expected);
             }
 
             using (var ctx = _createContext())
             {
                 var actual = GetActualEntity(ctx, id);
-                foreach (var property in _mappings)
-                {
-                    property.AssertValue(ctx, actual);
-                }
+                _mappings.ForEach(x => x.CheckValue(ctx, actual));
             }
-        }
-
-        private void SaveEntityToDb(DbContext ctx, TEntity expected)
-        {
-            var dbSet = GetDbSet(ctx);
-            dbSet.Add(expected);
-            ctx.SaveChanges();
-        }
-
-        private void SetPropertiesOnEntity(TEntity expected)
-        {
-            foreach (var property in _mappings)
-            {
-                property.SetValue(expected);
-            }
-        }
-
-        private TEntity CreateEntity(DbContext ctx)
-        {
-            var entity = GetDbSet(ctx).Create<TEntity>();
-            return entity;
         }
 
         private object[] GetKeyValue(TEntity expected)
@@ -72,8 +50,7 @@ namespace EFSpecs
             var keyValues = new List<object>();
             foreach (var keyMember in _keyMembers)
             {
-                var propertyInfo = typeof(TEntity).GetProperty(keyMember.Name);
-                var accessor = new PropertyAccessor(propertyInfo);
+                var accessor = typeof(TEntity).GetPropertyAccessor(keyMember.Name);
                 var value = accessor.GetValue(expected);
                 keyValues.Add(value);
             }
@@ -82,13 +59,8 @@ namespace EFSpecs
 
         private TEntity GetActualEntity(DbContext ctx, object[] id)
         {
-            var dbSet = GetDbSet(ctx);
+            var dbSet = ctx.Set<TEntity>();
             return dbSet.Find(id);
-        }
-
-        private DbSet<TEntity> GetDbSet(DbContext ctx)
-        {
-            return ctx.Set<TEntity>();
         }
     }
 }

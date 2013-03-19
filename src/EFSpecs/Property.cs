@@ -19,7 +19,7 @@ namespace EFSpecs
             _accessor.SetValue(entity, _expectedValue);
         }
 
-        public void AssertValue(DbContext ctx, object entity)
+        public void CheckValue(DbContext ctx, object entity)
         {
             var actualValue = _accessor.GetValue(entity);
             if (!_expectedValue.Equals(actualValue))

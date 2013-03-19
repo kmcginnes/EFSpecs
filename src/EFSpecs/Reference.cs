@@ -11,10 +11,10 @@ namespace EFSpecs
         public PropertyAccessor Accessor { get; private set; }
         public object ExpectedEntity { get; private set; }
 
-        public Reference(PropertyAccessor propertyInfo, object value)
+        public Reference(PropertyAccessor propertyAccessor, object expectedEntity)
         {
-            Accessor = propertyInfo;
-            ExpectedEntity = value;
+            Accessor = propertyAccessor;
+            ExpectedEntity = expectedEntity;
         }
 
         public void SetValue(object instance)
@@ -22,7 +22,7 @@ namespace EFSpecs
             Accessor.SetValue(instance, ExpectedEntity);
         }
 
-        public void AssertValue(DbContext ctx, object actual)
+        public void CheckValue(DbContext ctx, object actual)
         {
             var propertyType = Accessor.MemberType;
 
