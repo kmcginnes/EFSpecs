@@ -15,3 +15,12 @@ public void VerifyContactsMappings()
     .VerifyMappings();
 }
 ```
+
+## Todo
+
+I still have a few more things to accomplish with this library before I unleash it to the wild:
+
+* Create more integration tests
+* Refactor to be unit tested
+* Add specific exceptions for known SQL errors such as invalid column, invalid object (table), etc
+* Add better error messages for testers
