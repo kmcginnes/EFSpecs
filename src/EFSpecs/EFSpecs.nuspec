@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>EFSpecs</id>
+    <version>0.1.0</version>
+    <authors>Kris McGinnes, Christian Brubaker</authors>
+    <owners>kmcginnes</owners>
+    <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+    <projectUrl>https://github.com/kmcginnes/EFSpecs</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <summary>EFSpecs is a library to assist in testing your entity framework model mapping</summary>
+    <description>
+        EFSpecs is a library to assist in testing your entity framework model mapping. It will create an entity with the values you provide it with, then send that entity off to the database, then pull it from the database to verify the values were saved correctly. And being the good citizen that it is, the whole thing is wrapped in a transaction so it all gets rolled back.
+    </description>
+    <releaseNotes>Initial release.</releaseNotes>
+    <copyright>Copyright 2013</copyright>
+    <tags>EF EntityFramework NUnit XUnit TDD BDD Specs Specifications</tags>
+    <dependencies>
+      <dependency id="EntityFramework" version="4.1.0" />
+      <dependency id="ServiceStack.Text" version="3.5.0" />
+    </dependencies>
+  </metadata>
+</package>
