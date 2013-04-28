@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{0579
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFSpecs.Samples.NUnit", "Samples\EFSpecs.Samples.NUnit\EFSpecs.Samples.NUnit.csproj", "{39B2D6C5-D2E5-432F-8ADE-2F838D21AC28}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFSpecs.Samples.NUnit.EF5", "EFSpecs.Samples.NUnit.EF5\EFSpecs.Samples.NUnit.EF5.csproj", "{BF563B11-09F3-4C90-8851-0AB5A34F058F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,11 +30,16 @@ Global
 		{39B2D6C5-D2E5-432F-8ADE-2F838D21AC28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39B2D6C5-D2E5-432F-8ADE-2F838D21AC28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39B2D6C5-D2E5-432F-8ADE-2F838D21AC28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF563B11-09F3-4C90-8851-0AB5A34F058F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF563B11-09F3-4C90-8851-0AB5A34F058F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF563B11-09F3-4C90-8851-0AB5A34F058F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF563B11-09F3-4C90-8851-0AB5A34F058F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{39B2D6C5-D2E5-432F-8ADE-2F838D21AC28} = {05794F41-485F-400B-AB5E-8F4161015FD9}
+		{BF563B11-09F3-4C90-8851-0AB5A34F058F} = {05794F41-485F-400B-AB5E-8F4161015FD9}
 	EndGlobalSection
 EndGlobal
