@@ -11,10 +11,12 @@ public void VerifyContactsMappings()
     .CheckProperty(x => x.Name, "Zaphod Beeblebrox")
     .CheckProperty(x => x.NumberOfHeads, 2)
     .CheckProperty(x => x.NumberOfArms, 3)
-    .CheckReference(x => x.DistintCousins, new Person { Name = "Ford Prefect" })
+    .CheckReference(x => x.DistantCousins, new Person { Name = "Ford Prefect" })
     .VerifyMappings();
 }
 ```
+
+You may notice that this resembles Fluent NHibernates persistance specifications. That's because I went from a Fluent NHibernate project to one that uses Entity Framework and really missed this simple mapping test.
 
 ## Todo
 
@@ -23,7 +25,7 @@ I still have a few more things to accomplish with this library before I unleash 
 * Create more integration tests
 * Refactor to be unit tested
 * Add specific exceptions for known SQL errors such as invalid column, invalid object (table), etc
-* Add better error messages for testers
+* Add better error messages
 
 ## License
 
